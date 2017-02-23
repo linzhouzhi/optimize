@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="js/sparrow.css" rel="stylesheet" charset="utf-8">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+
+    <!--**************************************************************************-->
+    <div id="display_choose">
+        <input type="hidden" id="search_type" value="1"/>
+        <div class="search_all">
+            <input type="text" placeholder="请输入报纸名称/关键字" id="res_search_input">
+            <a class="search_btn btn btn_1" data-form-item="keyworkds" data-value="input:res_search_input">查找</a>
+        </div>
+        <div class="filter">
+            <div class="filter_cont_input">
+                <ul class="zmt_list_form_item" data-form-name="province_city" data-form-title="所在地">
+                    <li class="fr mr0">
+                        <div class="filter_cont_input">
+                        </div>
+                        <a class="filter_sure btn btn_1 ml20" style="width: 27px;" data-form-item="province_city" data-value="input:province-city">确定</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="filter_in">
+                <div class="filter_title">id：</div>
+                <div class="filter_cont">
+                    <ul data-form-name="id" data-form-title="admin_id">
+                        <li class="fr mr0">
+                            <div class="filter_cont_input">
+                                <input type="text" id="res_id1">-
+                                <input type="text" id="res_id2">
+                            </div>
+                            <a class="filter_sure btn btn_1" data-form-item="id" data-value="input:res_id1-res_id2">确定</a>
+                        </li>
+                        <li data-form-item="id" data-sparrow-tab-item="id" class="active">
+                            <a>不限</a></li>
+                        <li data-form-item="id" data-sparrow-tab-item="id" data-value="0-100">
+                            <a>0-100</a></li>
+                        <li data-form-item="id" data-sparrow-tab-item="id" data-value="100-200">
+                            <a>100-200</a></li>
+                        <li data-form-item="id" data-sparrow-tab-item="id" data-value="200-300">
+                            <a>200-300</a></li>
+                        <li data-form-item="id" data-sparrow-tab-item="id" data-value="300-">
+                            <a>300+</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="filter_in">
+                <div class="filter_title">type：</div>
+                <div class="filter_cont">
+                    <ul data-form-name="type" data-form-title="发行量">
+                        <li data-form-item="type" data-sparrow-tab-item="type" class="active">
+                            <a>不限</a></li>
+                        <li data-form-item="type" data-sparrow-tab-item="issue_size" data-value="0">
+                            <a>0</a></li>
+                        <li data-form-item="typee" data-sparrow-tab-item="issue_size" data-value="1">
+                            <a>1</a></li>
+                        <li data-form-item="type" data-sparrow-tab-item="issue_size" data-value="2">
+                            <a>2</a></li>
+                        <li data-form-item="type" data-sparrow-tab-item="issue_size" data-value="3">
+                            <a>3</a></li>
+                        <li data-form-item="type" data-sparrow-tab-item="issue_size" data-value="4">
+                            <a>4</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="media_already_choose">
+        <span class="fr f14 mr20">共<b class="danger" id="res_list_total_num"></b>条资源</span>
+        已选择：<span id="res_option_list"></span></span></div>
+    <!--**************************************************************************-->
+
+
+    <div class="btn-group">
+        <button type="button" data-toggle="refresh" class="btn btn-sm btn-default" title="刷新">
+            刷新
+        </button>
+        <button type="button" class="btn btn-sm btn-default" title="删除" data-toggle="batch" >
+            <i class="fa fa-trash-o"></i>删除管理员
+        </button>
+    </div>
+    <div class="btn-group">
+        <a id="demo_add_admin_btn" class="btn btn-default btn-sm" onclick="demo_add_admin()"><i class="fa fa-plus m-r-xs"></i>添加管理员</a>
+    </div>
+    <div class="btn-group">
+        <select>
+            <option value="0">所有类型</option>>
+            <option value="1">超级管理员</option>>
+            <option value="2">中级管理员</option>>
+            <option value="3">普通管理员</option>>
+        </select>
+    </div>
+    <div class="btn-group">
+        <input type="text" id="admin_keyword" size="5">
+        <input type="button" value="搜索">
+    </div>
+</div>
+</div>
+<div id="admin_list_div">
+    <!--这里是js模板-->
+</div>
+</div>
+</body>
+
+<script src="js/jquery.js"></script>
+<script src="js/layer/layer.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/tool.js"></script>
+<script src="js/util.js"></script>
+<script src="js/json.js"></script>
+<script src="js/window.js"></script>
+<script src="js/ajax.js"></script>
+<script src="js/pack.js"></script>
+<script src="js/smarty.js"></script>
+<script src="js/search_form.js"></script>
+<script src="js/validate.js"></script>
+<script src="js/static.js"></script>
+<script type="text/javascript">
+    window.SCRIPT_FILE = "http://localhost:8081/"
+    set_server_arg(1460194057, "v0.2", true, 1);
+    window.OUT_DATA = {"admin_list":[{"id":"646","admin_name":"aaaaabnbm","admin_pwd":"c3e61d5768d7eb88902b30fb253ee18f","type":"3","login_time":"0"},{"id":"645","admin_name":"dcfsafcdsjn","admin_pwd":"0539c5e609286a3fa6a0f3d614b3f7e0","type":"4","login_time":"0"},{"id":"644","admin_name":"huang777","admin_pwd":"asdfads","type":"0","login_time":"0"},{"id":"637","admin_name":"sadfw","admin_pwd":"5744a91e46bc4d6233785eab194e7853","type":"4","login_time":"0"},{"id":"636","admin_name":"no636111","admin_pwd":"a711680881ebe2f079ae87715775ffd5","type":"4","login_time":"0"},{"id":"635","admin_name":"zzzzzzbbb","admin_pwd":"d4a805a07e66ce22f3f511823b38dd08","type":"3","login_time":"0"}],"page_count":106,"page":1};
+    var data = window.OUT_DATA;
+
+    smarty.post( '/ajax_demo', {}, 'jstpl/demo_list_search', 'admin_list_div', function () {
+
+    } );
+
+    /**
+     * 显示数据
+     */
+    function display_data( data )
+    {
+        /*
+         smarty.html('sparrow/tool/demo_list_search', data, 'admin_list_div', function(){
+         set_var( 'list', data.list );
+         $( '#res_list_total_num' ).html( data.count );
+         } );
+         */
+        smarty.html( 'jstpl/demo_list_search', data, 'admin_list_div', function(){
+            $( '#res_list_total_num' ).html( data.count );
+        } );
+    }
+
+
+    /*****************************************************************************************
+     * 强转数字
+     */
+    smarty.register_modifier( 'admin_id', function( val ) {
+        return val*100;
+    } );
+
+    search_form.init('display_choose', {
+        view: 'res_option_list',
+        //初始的时候, 价格类型是选中的, 必须传 '1' 不能传 1
+        init_value: {},
+        callback: function( req_data ){
+            ajax.post( '/ajax_demo', req_data, display_data );
+        }
+    });
+    /**
+     * 点击添加
+     */
+    window.demo_add_admin = function()
+    {
+        smarty.open( 'jstpl/demo_add', {}, { title: 'Demo add', width:600, id: 'demo_admin_add_win'},function(){
+            //这里写回调啊
+            sparrow_form.init_radio( 'content_type', 1 );
+        } );
+    };
+
+    /**
+     * 关闭弹窗
+     * @returns {undefined}
+     */
+    function close_pop_win()
+    {
+        layer.close('demo_admin_add_win');
+    }
+
+    /**
+     * 点击添加按钮
+     */
+    window.demo_post_add = function()
+    {
+
+        var data_submit = sparrow_form.encode( 'admin_add_form' );
+        /*
+        if ( sparrow.empty( data_submit ) )
+        {
+            return false;
+        }
+        */
+        var data = {};
+        data.admin_name = $( '#admin_name_text' ).val().trim();
+        data.pwd = $( '#admin_pwd_text' ).val().trim();
+        data.repwd = $( '#admin_repwd_text' ).val().trim();
+        /*正常方式 1:关闭窗口 2:把内容放进ID
+         smarty.post( '/tool/demo/post_add', data, 'tool/demo_list', function( html ){
+         win.close( 'demo_admin_add_win' );
+         $( '#admin_list_div' ).html( html );
+         } );
+         */
+        //快捷方式
+        smarty.post( '/ajax_demo', data, 'jstpl/demo_list_search', 'admin_list_div', close_pop_win );
+    };
+    window.demo_post_edit = function()
+    {
+
+        var data = {};
+        data.id = $( '#admin_id_input' ).val();
+        data.admin_name = $( '#admin_name_text' ).val();
+        //快捷方式
+        smarty.post( '/ajax_edit_demo', data, 'jstpl/demo_list_row', 'admin_row_' + data.id, close_pop_win );
+    }
+</script>
+
+</html>
