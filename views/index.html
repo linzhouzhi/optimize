@@ -1,10 +1,52 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link href="js/sparrow.css" rel="stylesheet" charset="utf-8">
+    <link href="vender/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" charset="utf-8">
+</head>
 <body>
-<form action="http://127.0.0.1:8081/process_post" method="POST">
-    First Name: <input type="text" name="first_name">  <br>
 
-    Last Name: <input type="text" name="last_name">
-    <input type="submit" value="Submit">
-</form>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Optimize</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">add command <span class="sr-only">(current)</span></a></li>
+                <li><a href="#">command list</a></li>
+                <li><a href="#">server hosts</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">other <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+    <h1>hello wolrd</h1>
+</div><!-- .container-fluid -->
+
+<script src="js/jquery.js"></script>
+<script src="vender/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </body>
 </html>

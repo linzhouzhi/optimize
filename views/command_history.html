@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link href="../vender/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" charset="utf-8">
+    <link href="../vender/datatables/dataTables.bootstrap.css" rel="stylesheet" charset="utf-8">
+    <style>
+        .json_param_key_div{
+            width:20%;
+            float:left;
+        }
+        .json_param_black_div{
+            width:2%;
+            height: 2px;
+            float: left
+        }
+        .json_param_value_div{
+            width:78%;
+            float:left
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Optimize</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/command/add">add command <span class="sr-only">(current)</span></a></li>
+                <li><a href="/command/list">command list</a></li>
+                <li class="active"><a href="/command/history">history</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-time"></span> command history</h3>
+                </div>
+                <div class="panel-body">
+                    <table class="table table-bordered" id="command-table">
+                        <thead>
+                        <tr>
+                            <th>cid</th>
+                            <th>host</th>
+                            <th>command</th>
+                            <th>addTime</th>
+                            <th>startTime</th>
+                            <th>endTime</th>
+                            <th>runTime</th>
+                            <th>status</th>
+                            <th>action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td>@mdo</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>@3</td>
+                            <td><span class="label label-danger">fail</span></td>
+                            <td><span class="label label-default">detail</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td>@fat</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>@3</td>
+                            <td><span class="label label-info">waite</span></td>
+                            <td><span class="label label-warning">delete</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>@3</td>
+                            <td><span class="label label-success">Success</span></td>
+                            <td><span class="label label-default">detail</span></td>
+                        </tr>
+                        <tr>
+                            <th scope="row">3</th>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td>@twitter</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>@3</td>
+                            <td><span class="label label-primary">running</span></td>
+                            <td><span class="label label-warning">kill</span></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div><!-- .panel-body -->
+            </div><!-- .panel -->
+        </div><!-- .row -->
+    </div><!-- .container -->
+</div><!-- .container-fluid -->
+
+<script src="../js/jquery.js"></script>
+<script src="../vender/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="../vender/datatables/jquery.dataTables.js"></script>
+<script src="../vender/datatables/dataTables.bootstrap.js"></script>
+<script src="../js/optimize.js"></script>
+<script>
+    var $ = jQuery.noConflict();
+    $("#command-table").dataTable();
+</script>
+</body>
+</html>

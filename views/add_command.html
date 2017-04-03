@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <link href="../vender/bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet" charset="utf-8">
+    <style>
+        .json_param_key_div{
+            width:20%;
+            float:left;
+        }
+        .json_param_black_div{
+            width:2%;
+            height: 2px;
+            float: left
+        }
+        .json_param_value_div{
+            width:78%;
+            float:left
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Optimize</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/command/add">add command <span class="sr-only">(current)</span></a></li>
+                <li><a href="/command/list">command list</a></li>
+                <li><a href="/command/history">history</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> add command</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6" style="margin: 0 auto">
+                        <div class="form-group">
+                            <label>选择服务器</label>
+                            <div class="form-group">
+                                <div style="width: 46%; float: left">
+                                    <input type="text" name="host" class="form-control" placeholder="host">
+                                </div>
+                                <div class="json_param_black_div"></div>
+                                <div class="form-group" style="width: 25%; float: left">
+                                    <input type="text" name="username" class="form-control" placeholder="username">
+                                </div>
+                                <div class="json_param_black_div"></div>
+                                <div class="form-group" style="width: 25%; float: left">
+                                    <input type="text" name="password" class="form-control" placeholder="password">
+                                </div>
+                            </div>
+                        </div>
+                        <div style="clear: both"></div>
+                        <div class="form-group">
+                            <label> 添加命令</label>
+                            <input type="text" name="command" class="form-control" placeholder="/bin/sqoop">
+                        </div>
+                        <div class="form-group" id="add_param">
+                            <label>添加参数</label>
+                        </div><!-- #add_param -->
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default btn-xs" id="json-param"> + json param </button>
+                            <button type="button" class="btn btn-default btn-xs" id="string-param"> + string param </button>
+                        </div>
+                        <button type="submit" id="commad-submit" class="btn btn-default btn-block">Submit</button>
+                    </div><!-- .col-md-4 -->
+                </div><!-- .panel-body -->
+            </div><!-- .panel -->
+        </div><!-- .row -->
+    </div><!-- .container -->
+</div><!-- .container-fluid -->
+
+
+<!-- Modal -->
+<div class="modal fade" id="para_list_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">您将生成以下命令</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submit-command-form">submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="../js/jquery.js"></script>
+<script src="../vender/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+<script src="../js/optimize.js"></script>
+<script>
+    var $ = jQuery.noConflict();
+
+    var json_param_tpl='<div class="form-group param-item" data-type="json_param">'+
+            '<div class="json_param_key_div">'+
+            '<input type="text" class="form-control json_param_key" placeholder="key">'+
+            '</div>'+
+            '<div class="json_param_black_div"></div>'+
+            '<div class="form-group json_param_value_div">'+
+            '<input type="text" class="form-control json_param_value" placeholder="value">'+
+            '</div>'+
+            '</div>';
+
+    var json_string_tpl='<div class="form-group param-item" data-type="string_param">' +
+            '<input type="text" class="form-control string_param" placeholder="string param">'+
+            '</div>';
+
+    // 添加 json 类型参数
+    $("#json-param").click(function () {
+        $("#add_param").append(json_param_tpl);
+        console.log("hello wolrd!");
+    });
+    // 添加 string 类型参数
+    $("#string-param").click(function () {
+        $("#add_param").append(json_string_tpl);
+    });
+    // 提交命令
+    $("#commad-submit").click(function () {
+        var request_data = {};
+        //服务器
+        var host = $("input[name='host']").val();
+        var username = $("input[name='username']").val();
+        var password = $("input[name='password']").val();
+        // 命令
+        var command = $("input[name='command']").val();
+
+        // 参数列表
+        var param_items = $("#add_param").children("div.param-item");
+        var str_param = "";
+        var param_json = {};
+        var param_string = [];
+        for(var i = 0; i < param_items.length; i++){
+            var type = $(param_items.get(i)).data("type");
+            if( type == "json_param" ){
+                var key = $(param_items.get(i)).find("input.json_param_key").val();
+                var value = $(param_items.get(i)).find("input.json_param_value").val();
+                param_json[key] = value;
+                str_param += key + " " + value + " ";
+            }else{
+                var string_value = $(param_items.get(i)).find("input.string_param").val();
+                param_string.push( string_value );
+                str_param += string_value + " ";
+            }
+        }
+
+        // 解析参数
+        var param_res = gen_param_list(param_json, param_string);
+        request_data.host = host;
+        request_data.username = username;
+        request_data.password = password;
+        request_data.command = command;
+        request_data.param = param_res.join("|");
+        $("#submit-command-form").data("request", request_data);
+        show_list_modal(command, param_res);
+    });
+
+    $("#submit-command-form").click(function () {
+        var request_data = $("#submit-command-form").data("request");
+        $.ajax({
+            url:'/command/command_submit_ajax',
+            type:'POST',
+            async:true,
+            data:request_data,
+            timeout:5000,
+            dataType:'json',
+            success:function(data){
+                console.log( data );
+                console.log( data.length );
+            }
+        })
+    });
+
+    // 弹框显示 参数列表
+    function show_list_modal(command, param_res) {
+        var modal_str = "<ul>";
+        for( var i =0; i < param_res.length; i++ ){
+            modal_str += "<li>"+ command + param_res[i] +"</li>";
+        }
+        modal_str += "</ul>";
+        $('div.modal-body').html( modal_str );
+        $('#para_list_modal').modal('show');
+    }
+</script>
+</body>
+</html>
