@@ -35,6 +35,13 @@ function exe_all( results, params ) {
     }
 }
 
+// 检查命令的状态
+function check_command(){
+    // group host
+    // 如果 host 对应的 command 没有running 就启动一个 command 运行
+    // 运行完成后执行回调方法 成功就改成功状态失败就改失败状态
+}
+
 // 添加命令
 app.get('/command/add', function (req, res) {
     res.render('add_command', {title:'paint title'});

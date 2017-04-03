@@ -9,7 +9,7 @@
 * 7、cnpm install sqlite3 (sudo npm install -g cnpm --registry=https://registry.npm.taobao.org)
 
 * node app.js
-* http://127.0.0.1:8081/command/add#
+* http://127.0.0.1:8081/command/add
 json param:  -n  1-4-2
 string param: -direct
 
