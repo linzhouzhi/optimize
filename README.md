@@ -6,7 +6,8 @@
 * 4、npm install multer --save
 * 5、npm install ejs --save
 * 6、npm install simple-ssh --save 
-* 7、cnpm install sqlite3 (sudo npm install -g cnpm --registry=https://registry.npm.taobao.org)
+* 7、npm install --build-from-source
+* 8、npm install --save better-sqlite3 (python2.7)
 
 * node app.js
 * http://127.0.0.1:8081/command/add

@@ -17,11 +17,11 @@
             width:78%;
             float:left
         }
+
     </style>
 </head>
 <body>
-
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
@@ -38,13 +38,12 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><a href="/command/add">add command <span class="sr-only">(current)</span></a></li>
-                <li><a href="/command/list">command list</a></li>
                 <li class="active"><a href="/command/history">history</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
 </nav>
-
+<div style="width:10px;height:70px"></div>
 <div class="container-fluid">
     <div class="container">
         <div class="row">
@@ -68,50 +67,38 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        <% commands.forEach(function(item){ %>
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>@3</td>
-                            <td><span class="label label-danger">fail</span></td>
-                            <td><span class="label label-default">detail</span></td>
+                            <td><%= item.cid %></td>
+                            <td><%= item.host %></td>
+                            <td><%= item.command %> <%= item.param %></td>
+                            <td><%= item.add_time %></td>
+                            <td><%= item.start_time %></td>
+                            <td><%= item.end_time %></td>
+                            <td><%= item.run_time %></td>
+                            <td>
+                                <% if(item.status == 1){ %>
+                                <span class="label label-info">waite</span>
+                                <% }  else if(item.status == 2){ %>
+                                <span class="label label-primary">running</span>
+                                <% }  else if(item.status == 3){ %>
+                                <span class="label label-success">success</span>
+                                <% }  else if(item.status == 4 || item.status == 6){ %>
+                                <span class="label label-danger">fail</span>
+                                <% } %>
+                            </td>
+                            <td>
+                                <% if(item.status == 1){ %>
+                                <span class="label label-warning command-delete" data-cid="<%= item.cid %>">delete</span>
+                                <% }  else if(item.status == 2){ %>
+                                <span class="label label-warning command-kill" data-cid="<%= item.cid %>">kill</span>
+                                <% }  else { %>
+                                <span class="label label-default command-detail" data-cid="<%= item.cid %>">detail</span>
+                                <% } %>
+                            </td>
                         </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>@3</td>
-                            <td><span class="label label-info">waite</span></td>
-                            <td><span class="label label-warning">delete</span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>@3</td>
-                            <td><span class="label label-success">Success</span></td>
-                            <td><span class="label label-default">detail</span></td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>@3</td>
-                            <td><span class="label label-primary">running</span></td>
-                            <td><span class="label label-warning">kill</span></td>
-                        </tr>
+                        <% }) %>
                         </tbody>
                     </table>
                 </div><!-- .panel-body -->
@@ -119,6 +106,21 @@
         </div><!-- .row -->
     </div><!-- .container -->
 </div><!-- .container-fluid -->
+
+<!-- Modal -->
+<div class="modal fade" id="para_list_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">detail log</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="../js/jquery.js"></script>
 <script src="../vender/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
@@ -128,6 +130,50 @@
 <script>
     var $ = jQuery.noConflict();
     $("#command-table").dataTable();
+
+    function command_ajax(url, cid, func) {
+        $.ajax({
+            url:url,
+            type:'POST',
+            async:true,
+            data:{"cid": cid},
+            timeout:5000,
+            dataType:'json',
+            success:function(data){
+                if ( 'function' === typeof func ){
+                    func(data);
+                    return;
+                }
+                window.location.reload();
+            }
+        })
+    }
+
+    $(document).on('click',".command-delete",function () {
+        var cid = $(this).data("cid");
+        var url = '/command/command_delete_ajax';
+        command_ajax(url, cid);
+    });
+
+    $(document).on('click',".command-kill",function () {
+        var cid = $(this).data("cid");
+        var url = '/command/command_kill_ajax';
+        command_ajax(url, cid);
+    });
+
+    $(document).on('click',".command-detail",function () {
+        var cid = $(this).data("cid");
+        var url = '/command/command_detail_ajax';
+        command_ajax(url, cid,function (data) {
+            if( data.status == 6 ){
+                $('div.modal-body').text( "该任务是被 kill 掉的！" );
+            }else{
+                $('div.modal-body').text( data.log );
+            }
+            $('#para_list_modal').modal('show');
+        });
+    });
+
 </script>
 </body>
 </html>
