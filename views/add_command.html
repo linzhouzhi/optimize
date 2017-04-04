@@ -10,11 +10,23 @@
         .json_param_black_div{
             width:2%;
             height: 2px;
-            float: left
+            float: left;
         }
         .json_param_value_div{
-            width:78%;
-            float:left
+            width:68%;
+            float:left;
+        }
+        .string_param{
+            width:90%;
+            float:left;
+        }
+        .right-button{
+            width: 8%;
+            float: left;
+        }
+        a.btn-xs{
+            margin-top:5px;
+            border-radius: 50px;
         }
     </style>
 </head>
@@ -51,25 +63,29 @@
                     <h3 class="panel-title"><span class="glyphicon glyphicon-plus"></span> add command</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="col-md-6" style="margin: 0 auto">
+                    <div class="col-md-8" style="margin: 0 auto">
                         <div class="form-group">
                             <label>选择服务器</label>
                             <div class="form-group">
-                                <div style="width: 46%; float: left">
+                                <div class="form-group" style="width: 40%; float: left">
                                     <input type="text" name="host" class="form-control" placeholder="host">
                                 </div>
                                 <div class="json_param_black_div"></div>
-                                <div class="form-group" style="width: 25%; float: left">
+                                <div class="form-group" style="width: 23%; float: left">
                                     <input type="text" name="username" class="form-control" placeholder="username">
                                 </div>
                                 <div class="json_param_black_div"></div>
-                                <div class="form-group" style="width: 25%; float: left">
+                                <div class="form-group" style="width: 23%; float: left">
                                     <input type="text" name="password" class="form-control" placeholder="password">
+                                </div>
+                                <div class="json_param_black_div"></div>
+                                <div class="form-group right-button">
+                                    <a class="btn btn-default btn-xs glyphicon glyphicon-repeat ping-host" href="#"></a>
                                 </div>
                             </div>
                         </div>
                         <div style="clear: both"></div>
-                        <div class="form-group">
+                        <div class="form-group" style="width: 90%">
                             <label> 添加命令</label>
                             <input type="text" name="command" class="form-control" placeholder="/bin/sqoop">
                         </div>
@@ -80,7 +96,7 @@
                             <button type="button" class="btn btn-default btn-xs" id="json-param"> + json param </button>
                             <button type="button" class="btn btn-default btn-xs" id="string-param"> + string param </button>
                         </div>
-                        <button type="submit" id="commad-submit" class="btn btn-default btn-block">Submit</button>
+                        <button type="submit" id="commad-submit" style="width:90%" class="btn btn-default btn-block">Submit</button>
                     </div><!-- .col-md-4 -->
                 </div><!-- .panel-body -->
             </div><!-- .panel -->
@@ -115,18 +131,27 @@
     var $ = jQuery.noConflict();
 
     var json_param_tpl='<div class="form-group param-item" data-type="json_param">'+
-            '<div class="json_param_key_div">'+
+            '<div class="json_param_key_div form-group">'+
             '<input type="text" class="form-control json_param_key" placeholder="key">'+
             '</div>'+
             '<div class="json_param_black_div"></div>'+
             '<div class="form-group json_param_value_div">'+
             '<input type="text" class="form-control json_param_value" placeholder="value">'+
             '</div>'+
+            '<div class="json_param_black_div"></div>'+
+            '<div class="form-group right-button">'+
+            '<a class="btn btn-default btn-xs glyphicon glyphicon-remove param-rm" href="#"></a>'+
+            '</div>'+
             '</div>';
 
-    var json_string_tpl='<div class="form-group param-item" data-type="string_param">' +
+    var string_param_tpl='<div class="form-group param-item" data-type="string_param">' +
             '<input type="text" class="form-control string_param" placeholder="string param">'+
+            '<div class="json_param_black_div"></div>'+
+            '<div class="form-group right-button">'+
+            '<a class="btn btn-default btn-xs glyphicon glyphicon-remove param-rm" href="#"></a>'+
+            '</div>'+
             '</div>';
+
 
     // 添加 json 类型参数
     $("#json-param").click(function () {
@@ -135,10 +160,15 @@
     });
     // 添加 string 类型参数
     $("#string-param").click(function () {
-        $("#add_param").append(json_string_tpl);
+        $("#add_param").append(string_param_tpl);
     });
     // 提交命令
     $("#commad-submit").click(function () {
+        // 检查 input 是否为空
+        if( input_check() == false ){
+            return;
+        }
+
         var request_data = {};
         //服务器
         var host = $("input[name='host']").val();
@@ -187,15 +217,52 @@
             timeout:5000,
             dataType:'json',
             success:function(data){
-                console.log( data );
-                console.log( data.length );
+                $.get("/command/check_ajax");
+                $("[data-dismiss='modal']").trigger("click");
             }
-        })
+        });
+
+    });
+
+    // 检查 host 配置
+    $(".ping-host").click(function () {
+        var this_obj = this;
+        var req_data = {};
+        req_data.host = $("input[name='host']").val().trim();
+        req_data.username = $("input[name='username']").val().trim();
+        req_data.password = $("input[name='password']").val().trim();
+        if( req_data.host == "" || req_data.username == "" | req_data.password == "" ){
+            $(this).addClass("btn-danger").removeClass("btn-success");
+        }else{
+            $.ajax({
+                url:'/command/check_host_ajax',
+                type:'POST',
+                async:true,
+                data:req_data,
+                timeout:5000,
+                dataType:'json',
+                success:function(data){
+                    if( data == "1" ){
+                        $(this_obj).addClass("btn-success").removeClass("btn-danger");
+                    }else{
+                        $(this_obj).addClass("btn-danger").removeClass("btn-success");
+                    }
+                },
+                error:function (data) {
+                    $(this_obj).addClass("btn-danger").removeClass("btn-success");
+                }
+            });
+        }
+    });
+
+    // 删除参数
+    $(document).on('click', '.param-rm', function(){
+        $(this).parents('.param-item').remove();
     });
 
     // 弹框显示 参数列表
     function show_list_modal(command, param_res) {
-        var modal_str = "<ul>";
+        var modal_str = "<h4>" + command + "</h4><ul>";
         for( var i =0; i < param_res.length; i++ ){
             modal_str += "<li>"+ command + param_res[i] +"</li>";
         }
@@ -203,6 +270,33 @@
         $('div.modal-body').html( modal_str );
         $('#para_list_modal').modal('show');
     }
+
+    // 检查 input
+    function input_check() {
+        $("input:text").parent(".form-group").removeClass("has-error");
+        var input_list = $("input:text");
+        var flag = true;
+        for( var i = 0; i < input_list.length; i++ ){
+            var item = $(input_list[i]);
+            if( item.val().trim() == ""){
+                item.parent(".form-group").addClass("has-error");
+                if( flag == true ){
+                    flag = false;
+                }
+            }
+        }
+        return flag;
+    }
+
+    // 表单检查
+    $( document ).on( 'focus', 'input', function () {
+        $(this).parent(".form-group").removeClass("has-error");
+    } );
+    $( document ).on( 'blur', 'input', function () {
+        if( $(this).val().trim() == "" ){
+            $(this).parent(".form-group").addClass("has-error");
+        }
+    } );
 </script>
 </body>
 </html>

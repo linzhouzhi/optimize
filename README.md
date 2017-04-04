@@ -19,3 +19,8 @@ git push -u origin master
 参数写入到 mysql 中，然后通过定时器进行判断如果 同一个主机已经有命令处于 runing 那么就不做任何操作，如果没有
 就顺序选择一个运行并设置状态 running
 ssh 运行成功设置 success 否则设置 fail
+
+
+#
+sparksql  --driver-memory 2G,3G  --num-executors 3
+sqoop --direct  -m

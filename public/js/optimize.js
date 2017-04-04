@@ -104,15 +104,28 @@ function paramToArr( param ) {
     var end = parseInt(arr_param[1]);
     var split = parseInt(arr_param[2]);
     var dist = end - start;
-    var range = dist / split;
+    if( typeof(arr_param[3]) =="undefined" ){
+        var range = parseInt(dist / split);
+    }else{
+        var range = dist / split;
+        range = range.toFixed( parseInt(arr_param[3]) );
+    }
+
     var tmp_arr = [];
-    for( var j = 0; j < 3; j++ ){
+    for( var j = 0; j < split; j++ ){
         if( j == 0 ){
             tmp_arr[j] = start;
         }else{
-            var temp = start + j*range;
+            if( typeof(arr_param[3]) !="undefined" ){
+                var temp = start + j*range;
+                temp = temp.toFixed( parseInt(arr_param[3]) );
+            }else{
+                var temp = start + j*range;
+                temp = temp.toFixed(0);
+            }
+
             if( temp < end ){
-                tmp_arr[j] = start + j*range;
+                tmp_arr[j] = temp;
             }
         }
     }

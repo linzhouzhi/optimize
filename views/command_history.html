@@ -140,10 +140,15 @@
             timeout:5000,
             dataType:'json',
             success:function(data){
+                console.log(data);
                 if ( 'function' === typeof func ){
                     func(data);
                     return;
                 }
+                window.location.reload();
+            },
+            error:function (data) {
+                console.log(data);
                 window.location.reload();
             }
         })

@@ -8,22 +8,6 @@ var moment = require('moment');
 var app = config.app;
 var urlencodedParser = config.urlencodedParser;
 
-var ssh = new SSH({
-    host: '192.168.1.107',
-    user: 'lzz',
-    pass: 'linzhouzhi'
-});
-
-function ssh_exe( param ) {
-    ssh.exec('/home/lzz/test.sh ' + param, {
-        out: function(stdout) {
-            console.log(stdout);
-            ssh.end();
-        }
-    }).start();
-}
-
-
 // 运行一个命令
 function command_run(cid, host, user, pass, command) {
     var this_ssh = new SSH({host: host, user: user, pass: pass});
@@ -47,24 +31,41 @@ function check_command(){
     // group host
     var db = util.db;
     db.all("SELECT host FROM commands group by host", function(err, rows) {  //根据 host group 后进行判断
-        for(var index in rows){
+        rows.forEach(function (crow) {
             // status 2 表示 running 状态
-            var check_sql = "select count(*) as c from commands where status=2 and host='"+rows[index].host+"'";
+            var check_sql = "select count(*) as c from commands where status=2 and host='"+crow.host+"'";
             db.each(check_sql, function(err, row) {
                 if( row.c == 0 ){ // 如果没有任务在 running 那么就选择一个任务来运行
-                    var running_sql = "select * from commands where status=1 and host='"+rows[index].host+"' order by cid limit 1";
+                    var running_sql = "select * from commands where status=1 and host='"+crow.host+"' order by cid limit 1";
                     db.each(running_sql, function(err, item) {
                         command_run( item.cid, item.host, item.username, item.password, item.command+item.param );
                     });
                 };
             });
-        }
+        });
     });
 }
 
 // command check
 app.get('/command/check_ajax', function (req, res) {
+    console.log("check commandddddddddd");
     check_command();
+});
+
+// 检查 host 的配置
+app.post('/command/check_host_ajax', urlencodedParser, function (req, res) {
+    console.log(req.body);
+    var ssh = new SSH({host: req.body.host, user: req.body.username, pass: req.body.password});
+    ssh.exec("echo 1", {
+        out: function(stdout) {
+            ssh.end();
+            res.end(stdout);
+        },
+        err: function(stderr) {
+            ssh.end();
+            res.end("0");
+        }
+    }).start();
 });
 
 // 1 waite, 2 running, 3 success, 4 fail, 5 delete, 6 kill
@@ -72,14 +73,14 @@ app.get('/command/check_ajax', function (req, res) {
 app.post('/command/command_kill_ajax', urlencodedParser, function (req, res) {
     var cid = parseInt(req.body.cid);
     util.change_command_status(6, cid);
-    res.end("");
+    res.end("1");
 });
 // delete 命令
 app.post('/command/command_delete_ajax', urlencodedParser, function (req, res) {
     var cid = parseInt(req.body.cid);
     console.log(cid + "----------");
     util.change_command_status(5, cid);
-    res.end("");
+    res.end("1");
 });
 // detail 命令
 app.post('/command/command_detail_ajax', urlencodedParser, function (req, res) {
