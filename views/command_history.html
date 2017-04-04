@@ -73,10 +73,10 @@
                             <td><%= item.cid %></td>
                             <td><%= item.host %></td>
                             <td><%= item.command %> <%= item.param %></td>
-                            <td><%= item.add_time %></td>
-                            <td><%= item.start_time %></td>
-                            <td><%= item.end_time %></td>
-                            <td><%= item.run_time %></td>
+                            <td><%= moment(item.add_time).format('YYYY-MM-DD hh:mm:ss') %></td>
+                            <td><%= moment(item.start_time).format('YYYY-MM-DD hh:mm:ss') %></td>
+                            <td><%= moment(item.end_time).format('YYYY-MM-DD hh:mm:ss') %></td>
+                            <td><%= item.run_time/1000 %>/s</td>
                             <td>
                                 <% if(item.status == 1){ %>
                                 <span class="label label-info">waite</span>

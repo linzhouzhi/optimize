@@ -4,6 +4,7 @@
 var SSH = require('simple-ssh');
 var config = require("../config.js");
 var util = require("../util.js");
+var moment = require('moment');
 var app = config.app;
 var urlencodedParser = config.urlencodedParser;
 
@@ -108,7 +109,7 @@ app.get('/command/history', function (req, res) {
     var uuid = util.get_client_uuid(req);
     var db = util.db;
     db.all("SELECT * FROM commands where status<>5 and client_uuid='" + uuid + "'", function(err, rows) {
-        res.render('command_history', {commands: rows,supplies:['mop', 'broom', 'duster']});
+        res.render('command_history', {commands: rows,moment:moment});
     });
 });
 
