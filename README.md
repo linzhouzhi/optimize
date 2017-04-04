@@ -21,13 +21,9 @@ Optimize 就是为了解决这个问题而设计的，它自动生成参数的�
 * 6、npm install simple-ssh --save  // 执行命令通过ssh
 * 7、npm install --save better-sqlite3 (python2.7) // 数据保存在 sqlite
 * 8、npm install moment // 前端时间模版格式化
-* node app.js
-* http://127.0.0.1:8081/command/add
-json param:  -n  1-4-2
-string param: -direct
 
 ## 三、使用
-> 包含了如何 添加命令、预览命令、命令历史
+> 包含了如何 添加命令、预览命令、命令历史、启动查看
 
 ### 1、添加命令
 * 配置服务器，ssh  host username password
@@ -46,3 +42,8 @@ string param: -direct
 >  查看历史命令，您可以进行删除，kill,查看详情等操作
 
 <img src="./public/images/history.png" width="850px" />
+
+### 4、启动
+
+1 运行 node app.js   
+2 访问 http://127.0.0.1:8081/command/add
