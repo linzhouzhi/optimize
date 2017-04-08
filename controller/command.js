@@ -21,7 +21,7 @@ function command_run(cid, host, user, pass, command) {
         },
         err: function(stderr) {
             // 修改成失败状态
-            util.success_command(start_time, cid, stdout);
+            util.success_command(start_time, cid, stderr);
         }
     }).start();
 }
